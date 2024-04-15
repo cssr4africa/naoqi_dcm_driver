@@ -197,21 +197,33 @@ std::vector<double> Motion::getAngles(const std::string &robot_part)
   return res;
 }
 
+// void Motion::writeJoints(const std::vector <double> &joint_commands)
+// {
+//   //prepare the list of joints
+//   qi::AnyValue names_qi = fromStringVectorToAnyValue(joints_names_);
+
+//   //prepare the list of joint angles
+//   qi::AnyValue angles_qi = fromDoubleVectorToAnyValue(joint_commands);
+
+//   try
+//   {
+//     motion_proxy_.async<void>("setAngles", names_qi, angles_qi, 0.2f);
+//   }
+//   catch(const std::exception& e)
+//   {
+//     ROS_ERROR("Motion: Failed to set joints nagles! \n\tTrace: %s", e.what());
+//   }
+// }
+
 void Motion::writeJoints(const std::vector <double> &joint_commands)
 {
-  //prepare the list of joints
-  qi::AnyValue names_qi = fromStringVectorToAnyValue(joints_names_);
-
-  //prepare the list of joint angles
-  qi::AnyValue angles_qi = fromDoubleVectorToAnyValue(joint_commands);
-
   try
   {
-    motion_proxy_.async<void>("setAngles", names_qi, angles_qi, 0.2f);
+    motion_proxy_.async<void>("setAngles", joints_names_, joint_commands, 0.2f);
   }
   catch(const std::exception& e)
   {
-    ROS_ERROR("Motion: Failed to set joints nagles! \n\tTrace: %s", e.what());
+    ROS_ERROR("Motion: Failed to set joints angles! \n\tTrace: %s", e.what());
   }
 }
 
